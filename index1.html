@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click to Add Store</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* د کارتونو بکس */
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            max-width: 1000px;
+        }
+
+        /* د کارت سټایل - اوس د کلیک کولو نښه (cursor: pointer) لري */
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 160px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-top: 5px solid #3498db;
+            user-select: none; /* د متن د سلکټ کېدو مخنیوی کوي */
+        }
+
+        /* کله چې موږک ورانبانډې شي */
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background-color: #ebf5fb;
+        }
+
+        /* کله چې کلیک ورباندې وشي (قوي کېږي) */
+        .product-card:active {
+            transform: scale(0.95);
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .add-text {
+            font-size: 0.8rem;
+            color: #3498db;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* د نهایی بل بکس */
+        .total-box {
+            margin-top: 40px;
+            background: #2c3e50;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        /* د متحرک کېدو لپاره کلاس کله چې قیمت بدل شي */
+        .bump {
+            transform: scale(1.1);
+            background: #27ae60;
+        }
+        .footer {
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Stationery Shop</h1>
+    <p>👇 Click on any item to add it to your total bill!</p>
+
+    <div class="products-container" id="products-list"></div>
+
+    <div class="total-box" id="total-price-display">
+        Total Price: $0
+    </div>
+<div class="footer">
+  <p>Made with ❤️ by Sharifullah Manali</p>
+</div>
+    <script>
+        // ستا ډیټا
+        const products = [
+            { name: "pen", price: 15 },
+            { name: "notebook", price: 20 },
+            { name: "pencil", price: 10 },
+            { name: "eraser", price: 5 },
+            { name: "mouse", price: 30 }
+        ];
+
+        // قیمت په اول کې صفر دی
+        let totalPrice = 0; 
+        
+        const productsContainer = document.getElementById('products-list');
+        const totalPriceDisplay = document.getElementById('total-price-display');
+
+        // ستا د خوښې .forEach() لوپ د کارتونو جوړولو لپاره
+        products.forEach(product => {
+            
+            // ۱. یو خالي Div یا بکس په پاڼه کې جوړول
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            // ۲. د کارت دننه مواد ور اچول
+            card.innerHTML = `
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">$${product.price}</div>
+                <div class="add-text">+ Click to Add</div>
+            `;
+
+            card.addEventListener('click', () => {
+                // کله چې کلیک وشي، قیمت جمع کړه:
+                totalPrice = totalPrice + product.price;
+                
+                // په سکرین باندې نوی قیمت وښیه
+                totalPriceDisplay.innerText = `Total Price: $${totalPrice}`;
+                
+                // د کونسول لپاره لاګ
+                console.log(`Added ${product.name}! New Total: $${totalPrice}`);
+
+                // د بل بکس ته لږ ډیزاین یا انیمیشن ورکول کله چې کلیک وشي
+                totalPriceDisplay.classList.add('bump');
+                setTimeout(() => {
+                    totalPriceDisplay.classList.remove('bump');
+                }, 200);
+            });
+
+            // ۴. کارت په اصلي غټ بکس کې ځای پر ځای کول
+            productsContainer.appendChild(card);
+        });
+    </script>
+
+</body>
+</html>
